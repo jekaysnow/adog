@@ -3,15 +3,31 @@ server:
 
 spring:
   application:
-    name: eureka-service
+    name: @pom.artifactId@
 
 eureka:
+  server:
+    ## 中小规模下，自我保护模式坑比好处多，所以关闭它
+    enable-self-preservation: false
+    ## 心跳阈值计算周期，如果开启自我保护模式，可以改一下这个配置
+    #renewal-threshold-update-interval-ms: 120000
+    ## 主动失效检测间隔,配置成5秒
+    eviction-interval-timer-in-ms: 5000
+    ## 禁用readOnlyCacheMap
+    use-read-only-response-cache: false
+    ## 不等待其他实例同步
+    wait-time-in-ms-when-sync-empty: 0
   instance:
+    ## 心跳间隔，5秒
+    lease-renewal-interval-in-seconds: 5
+    ## 没有心跳的淘汰时间，10秒
+    lease-expiration-duration-in-seconds: 10
+    ## sever name
     hostname: localhost
+    prefer-ip-address: true
   client:
     registerWithEureka: false
     fetchRegistry: false
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
-
 
